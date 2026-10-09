@@ -16,7 +16,7 @@ public class PaymentMethodTests
         string expectedName,
         string expetedNormalizedName)
     {
-        var paymentMethod = new PaymentMethod(null, input, null, userId: 1);
+        var paymentMethod = new PaymentMethod(1, input, null, userId: 1);
 
         paymentMethod.Name.Should().Be(expectedName);
         paymentMethod.NormalizedName.Should().Be(expetedNormalizedName);
@@ -28,7 +28,7 @@ public class PaymentMethodTests
     [InlineData("   ")]
     public void SetName_WithInvalidName_ShouldThrowAnException(string invalidName)
     {
-        FluentActions.Invoking(() => new PaymentMethod(id:null, name: invalidName, description:  null, userId: 1,isActive: true))
+        FluentActions.Invoking(() => new PaymentMethod(id:1, name: invalidName, description:  null, userId: 1,isActive: true))
             .Should()
             .Throw<ArgumentException>()
             .WithMessage("*O Nome do método deve ser fornecido: *");

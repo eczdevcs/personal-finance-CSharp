@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+
 using System.Text.RegularExpressions;
+
 namespace PersonalFinanceMng.Domain.Entities
 {
+  
     public class PaymentMethod
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
+      
         public string Name { get; set; } = string.Empty;
         public string NormalizedName { get; set; } = string.Empty;
-
+ 
         public string? Description { get; set; }
-
-        public bool? IsActive { get; set; }
+       
+        public bool IsActive { get; set; } = true;
     
         public int? UserId { get; set; }
 
-        public PaymentMethod(int? id, string name, string? description, int? userId, bool isActive = true)
+        public PaymentMethod(int id, string name, string? description, int? userId, bool isActive = true)
         {
             if(string.IsNullOrWhiteSpace(name)) throw new ArgumentException("O Nome do método deve ser fornecido: ", nameof(name));
 
@@ -40,21 +42,31 @@ namespace PersonalFinanceMng.Domain.Entities
 
         public override bool Equals(object? obj)
         {
+            // 1. Se for nulo ou de tipo diferente, não é igual
             if (obj is not PaymentMethod other)
                 return false;
 
+            // 2. Se for a mesma referência na memória, é igual
             if (ReferenceEquals(this, other))
                 return true;
 
-            if (Id.HasValue && other.Id.HasValue)
-                return Id.Value == other.Id.Value;
+            // 3. Se for uma entidade temporária (ainda não salva no banco), 
+            // não podemos comparar por Id=0
+            if (Id == 0 || other.Id == 0)
+                return false;
 
-            return false;
+            // 4. Se ambas já possuem Id do banco, compara pelos Ids
+            return Id == other.Id;
         }
 
         public override int GetHashCode()
         {
-            return Id.HasValue ? Id.Value.GetHashCode() : base.GetHashCode();
+            // Se a entidade ainda é nova (Id == 0), usa a referência base da memória.
+            // Se já tem Id, usa o Id para o hash.
+            if (Id == 0)
+                return base.GetHashCode();
+
+            return HashCode.Combine(GetType(), Id);
         }
     }
 }
