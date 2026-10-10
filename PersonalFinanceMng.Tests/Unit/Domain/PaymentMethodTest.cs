@@ -44,4 +44,40 @@ public class PaymentMethodTests
 
         result.Should().BeTrue();
     }
+
+    [Fact]
+    public void SetDetails_WithOrWithoutNameAndDescriptionNecessarelyProvided_ShouldSetCorrectly()
+    {
+        //Arrange
+        var pm = new PaymentMethod("Pix", "Pagamento isntantaneo", 1);
+        var pm2 = new PaymentMethod("VR", "Vale", 1);
+        // Act
+        // providing both name and description
+        pm.UpdateDetails("Dinheiro", "Dinheiro vivo");
+        //providing just description
+        pm2.UpdateDetails(null, "Vale refeicao Flash");
+
+
+        // Assert
+        pm.Name.Should().Be("Dinheiro");
+        pm.Description.Should().Be("Dinheiro vivo");
+        pm2.Name.Should().Be("VR");
+        pm2.Description.Should().Be("Vale refeicao Flash");
+    }
+
+    [Fact]
+    public void Deactivate_ShouldSetIsActiveToFalse()
+    {
+        //Arrange
+            var pm = new PaymentMethod("Pix", "Pagamento isntantaneo", 1, true);
+
+        //Act
+             pm.Deactivate();
+        //Assert
+        pm.Should().NotBe(null);
+        pm.Name.Should().Be("Pix");
+        pm.Description.Should().Be("Pagamento isntantaneo");
+        pm.IsActive.Should().Be(false);
+    }
+
 }

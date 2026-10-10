@@ -11,6 +11,11 @@ public class PaymentMethodConfiguration : IEntityTypeConfiguration<PaymentMethod
         builder.ToTable("PaymentMethods");
 
         builder.HasKey(p => p.Id);
+        // Filtra automaticamente entidades inativas em todas as consultas
+        builder.HasQueryFilter(p => p.IsActive);
+
+        builder.Property(p => p.Id)
+       .ValueGeneratedOnAdd();
 
         builder.Property(p => p.Name)
             .IsRequired()

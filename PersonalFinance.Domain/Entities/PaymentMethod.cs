@@ -18,15 +18,21 @@ namespace PersonalFinanceMng.Domain.Entities
     
         public int? UserId { get; set; }
 
-        public PaymentMethod(int id, string name, string? description, int? userId, bool isActive = true)
-        {
-            if(string.IsNullOrWhiteSpace(name)) throw new ArgumentException("O Nome do método deve ser fornecido: ", nameof(name));
 
-            Id = id;
+        private PaymentMethod() { }
+        public PaymentMethod(string name, string? description, int? userId, bool isActive = true)
+        {
+            //if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("O Nome do método deve ser fornecido: ", nameof(name));
             SetName(name);
             Description = description;
             UserId = userId;
             IsActive = isActive;
+        }
+      
+        public PaymentMethod(int id, string name, string? description, int? userId, bool isActive = true)
+        : this(name, description, userId, isActive)
+        {
+            Id = id;
         }
 
 
@@ -38,6 +44,21 @@ namespace PersonalFinanceMng.Domain.Entities
 
 
             NormalizedName = Regex.Replace(Name.ToLowerInvariant(), @"\s+", " ");
+        }
+
+        public void UpdateDetails(string? name, string description)
+        {
+            if (name != null)
+            {
+                SetName(name);
+            }
+           
+            Description = description;
+        }
+
+        public void Deactivate()
+        {
+            IsActive = false;
         }
 
         public override bool Equals(object? obj)
