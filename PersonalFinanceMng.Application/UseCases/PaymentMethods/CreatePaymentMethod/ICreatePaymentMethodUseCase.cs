@@ -6,7 +6,8 @@ namespace PersonalFinanceMng.Application.UseCases.PaymentMethods.CreatePaymentMe
 {
     public interface ICreatePaymentMethodUseCase
     {
-        Task<PaymentMethodResponseDTO> ExcecuteAsync(
+        Task<PaymentMethodResponseDTO> ExecuteAsync
+        (
             CreatePaymentMethodRequestDTO  requestDTO
         );
     }

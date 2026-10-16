@@ -40,8 +40,8 @@ namespace PersonalFinanceMng.Tests.Integration.Repository
             await ResetDatabaseAsync(context);
 
             var repository = new PaymentMethodRepository(context);
-
-            var paymentMethod = new PaymentMethod("Cartão de Crédito", "Uso pessoal", 1);
+            var userId = Guid.NewGuid();
+            var paymentMethod = new PaymentMethod("Cartão de Crédito", "Uso pessoal", userId);
 
             //Act
             await repository.AddAsync(paymentMethod);
@@ -54,7 +54,7 @@ namespace PersonalFinanceMng.Tests.Integration.Repository
             //Assertions
             result.Should().NotBeNull();
             result!.Name.Should().Be("Cartão de Crédito");
-            result.UserId.Should().Be(1);
+            result.UserId.Should().Be(userId);
             result.IsActive.Should().BeTrue();
         }
 
@@ -67,9 +67,10 @@ namespace PersonalFinanceMng.Tests.Integration.Repository
             await ResetDatabaseAsync(context);
 
             var repository = new PaymentMethodRepository(context);
+            var userId = Guid.NewGuid();
 
-            var item1 = new PaymentMethod("Pix", "Pagamento eletronico", 1, true);
-            var item2 = new PaymentMethod("Pix", "Pagamento eletronico", 1, true);
+            var item1 = new PaymentMethod("Pix", "Pagamento eletronico", userId, true);
+            var item2 = new PaymentMethod("Pix", "Pagamento eletronico", userId, true);
 
             // Act
             await repository.AddAsync(item1);
@@ -90,8 +91,8 @@ namespace PersonalFinanceMng.Tests.Integration.Repository
             using var context = new AppDbContext(options);
             await ResetDatabaseAsync(context);
             var repository = new PaymentMethodRepository(context);
-
-            var entity = new PaymentMethod("Pix", "Pagamento instantaneo", 1);
+            var userId = Guid.NewGuid();
+            var entity = new PaymentMethod("Pix", "Pagamento instantaneo", userId);
 
             await repository.AddAsync(entity);
             await context.SaveChangesAsync();
@@ -112,8 +113,8 @@ namespace PersonalFinanceMng.Tests.Integration.Repository
             using var context = new AppDbContext(options);
             await ResetDatabaseAsync(context);
             var repository = new PaymentMethodRepository(context);
-
-            var entity = new PaymentMethod("Pix", "Pagamento instantaneo", 1);
+            var userId = Guid.NewGuid();
+            var entity = new PaymentMethod("Pix", "Pagamento instantaneo", userId);
 
             await repository.AddAsync(entity);
             await context.SaveChangesAsync();
@@ -137,7 +138,8 @@ namespace PersonalFinanceMng.Tests.Integration.Repository
             using var context = new AppDbContext(options);
             await ResetDatabaseAsync(context);
             var repository = new PaymentMethodRepository(context);
-            var entity = new PaymentMethod("Pix", "Pagamento instantaneo", 1);
+            var userId = Guid.NewGuid();
+            var entity = new PaymentMethod("Pix", "Pagamento instantaneo", userId);
             await repository.AddAsync(entity);
 
             // Act
@@ -157,8 +159,9 @@ namespace PersonalFinanceMng.Tests.Integration.Repository
             var options = CreateNewContextOptions();
             using var context = new AppDbContext(options);
             await ResetDatabaseAsync(context);
+            var userId = Guid.NewGuid();
             var repository = new PaymentMethodRepository(context);
-            var entity = new PaymentMethod("Pix", "Pagamento instantaneo", 1);
+            var entity = new PaymentMethod("Pix", "Pagamento instantaneo", userId);
             await repository.AddAsync(entity);
 
             // Act

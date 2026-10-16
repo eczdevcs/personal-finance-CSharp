@@ -8,7 +8,7 @@ namespace PersonalFinanceMng.Application.UseCases.PaymentMethods.CreatePaymentMe
     (
         int Id, 
         string Name,
-        int? UserId,
+        Guid? UserId,
         bool IsActive,
         DateTime CreatedAt,
         DateTime UpdatedAt

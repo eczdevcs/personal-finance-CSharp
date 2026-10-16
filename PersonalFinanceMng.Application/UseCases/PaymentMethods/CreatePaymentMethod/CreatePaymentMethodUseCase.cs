@@ -5,25 +5,36 @@ using System;
 using PersonalFinanceMng.Application.UseCases.PaymentMethods.CreatePaymentMethod;
 namespace PersonalFinanceMng.Application.UseCases.PaymentMethods.CreatePaymentMethod
 {
-    class CreatePaymentMethodUseCase : ICreatePaymentMethodUseCase
+    public class CreatePaymentMethodUseCase : ICreatePaymentMethodUseCase
 
     {
-        // posteriormente injetar um repositorio de usuario, para checagem previa da existencia dele 
+     
         private readonly IPaymentMethodRepository _paymentMethodRepsitory;
+        private readonly IUserRepository _userRepository;
 
-        public CreatePaymentMethodUseCase(IPaymentMethodRepository paymentMethodRepository)
+
+        public CreatePaymentMethodUseCase(IPaymentMethodRepository paymentMethodRepository, IUserRepository userRepository)
         {
             _paymentMethodRepsitory = paymentMethodRepository;
+            _userRepository = userRepository;
         }
 
-        public async Task<PaymentMethodResponseDTO> 
-            ExcecuteAsync(CreatePaymentMethodRequestDTO requestDTO)
-        {
-           var paymentMethod = new PaymentMethod(requestDTO.Name, requestDTO.Description, requestDTO.UserId, true);
 
-            // O correto seria checar se o usuario existe, para proceder ao registro
-            // Para checagem um user repository teria que ser injetado para buscar e checar
- 
+
+
+        public async Task<PaymentMethodResponseDTO> 
+            ExecuteAsync(CreatePaymentMethodRequestDTO requestDTO)
+        {
+          
+            var userExists = await _userRepository.UserExistsAsync(requestDTO.UserId);
+
+            if (userExists == false) 
+            {
+                throw new KeyNotFoundException($"Usuário com ID {requestDTO.UserId} não foi encontrado.");
+            }
+
+            var paymentMethod = new PaymentMethod(requestDTO.Name, requestDTO.Description, requestDTO.UserId, true);
+
             await _paymentMethodRepsitory.AddAsync(paymentMethod);
 
             return new PaymentMethodResponseDTO (

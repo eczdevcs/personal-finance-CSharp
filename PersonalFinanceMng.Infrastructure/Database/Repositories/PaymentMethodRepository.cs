@@ -41,7 +41,7 @@ public class PaymentMethodRepository : IPaymentMethodRepository
     }
 
     // READ (Get All By User)
-    public async Task<IEnumerable<PaymentMethod>> GetAllByUserIdAsync(int userId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<PaymentMethod>> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         return await _context.Set<PaymentMethod>()
             .Where(p => p.UserId == userId || p.UserId == null)

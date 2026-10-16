@@ -9,7 +9,7 @@ namespace PersonalFinanceMng.Application.UseCases.PaymentMethods.CreatePaymentMe
     (
         string Name,
         string Description,
-        int UserId,
+        Guid UserId,
         bool IsActive
     );
 }

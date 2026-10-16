@@ -16,14 +16,14 @@ namespace PersonalFinanceMng.Domain.Entities
        
         public bool IsActive { get; set; } = true;
     
-        public int? UserId { get; set; }
+        public Guid? UserId { get; set; }
 
         public DateTime CreatedAt  { get; private set; }
         public DateTime UpdatedAt { get; private set; }
 
 
         private PaymentMethod() { }
-        public PaymentMethod(string name, string? description, int userId, bool isActive = true)
+        public PaymentMethod(string name, string? description, Guid userId, bool isActive = true)
         {
             //if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("O Nome do método deve ser fornecido: ", nameof(name));
             SetName(name);
@@ -37,7 +37,7 @@ namespace PersonalFinanceMng.Domain.Entities
         public PaymentMethod(
             string name, 
             string? description, 
-            int userId, 
+            Guid userId, 
             DateTime createdAt, 
             DateTime updatedAt, 
             bool isActive) : this(name, description, userId, isActive)
@@ -57,7 +57,7 @@ namespace PersonalFinanceMng.Domain.Entities
             UpdatedAt = DateTime.UtcNow;
         }
 
-        public PaymentMethod(int id, string name, string? description, int userId, bool isActive = true)
+        public PaymentMethod(int id, string name, string? description, Guid userId, bool isActive = true)
         : this(name, description, userId, isActive)
         {
             Id = id;
