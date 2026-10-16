@@ -1,6 +1,6 @@
 ﻿
-
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace PersonalFinanceMng.Domain.Entities
 {
@@ -18,23 +18,50 @@ namespace PersonalFinanceMng.Domain.Entities
     
         public int? UserId { get; set; }
 
+        public DateTime CreatedAt  { get; private set; }
+        public DateTime UpdatedAt { get; private set; }
+
 
         private PaymentMethod() { }
-        public PaymentMethod(string name, string? description, int? userId, bool isActive = true)
+        public PaymentMethod(string name, string? description, int userId, bool isActive = true)
         {
             //if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("O Nome do método deve ser fornecido: ", nameof(name));
             SetName(name);
             Description = description;
             UserId = userId;
             IsActive = isActive;
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
         }
-      
-        public PaymentMethod(int id, string name, string? description, int? userId, bool isActive = true)
+
+        public PaymentMethod(
+            string name, 
+            string? description, 
+            int userId, 
+            DateTime createdAt, 
+            DateTime updatedAt, 
+            bool isActive) : this(name, description, userId, isActive)
+        {
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+        }
+
+        public PaymentMethod(string name, string? description, bool isActive = true)
+        {
+            //if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("O Nome do método deve ser fornecido: ", nameof(name));
+            SetName(name);
+            Description = description;
+            UserId = null;
+            IsActive = isActive;
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+        public PaymentMethod(int id, string name, string? description, int userId, bool isActive = true)
         : this(name, description, userId, isActive)
         {
             Id = id;
         }
-
 
         public void SetName(string name)
         {
@@ -54,6 +81,7 @@ namespace PersonalFinanceMng.Domain.Entities
             }
            
             Description = description;
+            UpdatedAt = DateTime.UtcNow;
         }
 
         public void Deactivate()

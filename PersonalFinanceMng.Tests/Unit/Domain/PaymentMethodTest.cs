@@ -37,8 +37,8 @@ public class PaymentMethodTests
     [Fact]
     public void Equals_With_SameId_Should_return_true()
     {
-        var pm1 = new PaymentMethod(1, "Pix", null, null, true);
-        var pm2 = new PaymentMethod(1, "Dinheiro", null, null, true);
+        var pm1 = new PaymentMethod(1, "Pix", null, 1, true);
+        var pm2 = new PaymentMethod(1, "Dinheiro", null, 1, true);
 
         var result = pm1.Equals(pm2);
 
@@ -78,6 +78,29 @@ public class PaymentMethodTests
         pm.Name.Should().Be("Pix");
         pm.Description.Should().Be("Pagamento isntantaneo");
         pm.IsActive.Should().Be(false);
+    }
+
+    [Fact]
+    public void Equals_ShouldReturTrueIfIdAreEqualFalseNoProvidedIds()
+    {
+
+        //Arrange
+
+        var pm1 = new PaymentMethod(1, "Pix", "Pagamento isntantaneo", 1, true);
+        var pm2 = new PaymentMethod(1, "Pix", "Pagamento isntantaneo", 1, true);
+
+        var pm3WithoutId =  new  PaymentMethod("Pix", "Pagamento isntantaneo", 1, true);
+        var pm4WithoutId = new PaymentMethod("Pix", "Pagamento isntantaneo", 1, true);
+
+        // Act
+        var resultTwoIdEquals = pm1.Equals(pm2);
+        var resultNoIdProvided = pm3WithoutId.Equals(pm4WithoutId);
+
+
+        // Assertion 
+
+        resultTwoIdEquals.Should().BeTrue();
+        resultNoIdProvided.Should().BeFalse();
     }
 
 }
