@@ -27,7 +27,7 @@ namespace PersonalFinanceMng.Domain.Entities
         {
             //if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("O Nome do método deve ser fornecido: ", nameof(name));
             SetName(name);
-            Description = description;
+            Description = description ?? "Description not provided";
             UserId = userId;
             IsActive = isActive;
             CreatedAt = DateTime.UtcNow;

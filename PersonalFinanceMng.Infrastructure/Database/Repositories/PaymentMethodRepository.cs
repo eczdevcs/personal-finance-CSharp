@@ -16,14 +16,23 @@ public class PaymentMethodRepository : IPaymentMethodRepository
     }
 
     // CREATE
-    public async Task AddAsync(PaymentMethod paymentMethod, CancellationToken cancellationToken = default)
+    public async Task AddAsync(
+        PaymentMethod paymentMethod, 
+        CancellationToken cancellationToken = default    
+    )
     {
-        await _context.Set<PaymentMethod>().AddAsync(paymentMethod, cancellationToken);
+        await _context.Set<PaymentMethod>()
+            .AddAsync(paymentMethod, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
     }
 
+
     // UPDATE
-    public async Task<PaymentMethod> UpdateAsync(PaymentMethod paymentMethod, CancellationToken cancellationToken = default)
+    public async Task<PaymentMethod> UpdateAsync(
+        Guid userId,
+        PaymentMethod paymentMethod, 
+        CancellationToken cancellationToken = default
+    )
     {
         var entry = _context.Set<PaymentMethod>().Update(paymentMethod);
         await _context.SaveChangesAsync(cancellationToken);
@@ -31,25 +40,25 @@ public class PaymentMethodRepository : IPaymentMethodRepository
         return entry.Entity;
     }
 
-   
-
-    // READ (Get By Id)
-    public async Task<PaymentMethod?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
-    {
-        return await _context.Set<PaymentMethod>()
-            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-    }
 
     // READ (Get All By User)
-    public async Task<IEnumerable<PaymentMethod>> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<PaymentMethod>> GetAllByUserIdAsync(
+        Guid userId, 
+        CancellationToken cancellationToken = default
+    )
     {
         return await _context.Set<PaymentMethod>()
             .Where(p => p.UserId == userId || p.UserId == null)
             .ToListAsync(cancellationToken);
     }
 
+
     //Delete permanently
-    public async Task HardDeleteAsync(PaymentMethod paymentMethod, CancellationToken cancellationToken = default)
+    public async Task HardDeleteAsync(
+        Guid userId, 
+        PaymentMethod paymentMethod, 
+        CancellationToken cancellationToken = default
+    )
     {
         // Remove o registro do contexto de rastreamento
         _context.Set<PaymentMethod>().Remove(paymentMethod);
@@ -58,12 +67,32 @@ public class PaymentMethodRepository : IPaymentMethodRepository
         await _context.SaveChangesAsync(cancellationToken);
     }
 
+
     // turns IsActive false;
-    public async Task SoftDeleteAsync(PaymentMethod paymentMethod, CancellationToken cancellationToken = default)
+    public async Task SoftDeleteAsync(
+        Guid userId, 
+        PaymentMethod paymentMethod,
+        CancellationToken cancellationToken = default
+    )
     {
         paymentMethod.Deactivate();
         _context.Set<PaymentMethod>().Update(paymentMethod);
         await _context.SaveChangesAsync(cancellationToken);
+    }
+
+
+    async public Task<PaymentMethod?> GetByIdAsync(
+        Guid userId, 
+        int paymentMethodId, 
+        CancellationToken cancellationToken = default
+    )
+    {
+          return await _context.Set<PaymentMethod>()
+         .FirstOrDefaultAsync(
+              p => p.Id == paymentMethodId 
+              && (p.UserId == userId || p.UserId == null),
+              cancellationToken
+         );
     }
 
 

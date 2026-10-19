@@ -84,7 +84,7 @@ namespace PersonalFinanceMng.Tests.Integration.Repository
 
         [Fact]
 
-        public async Task GetByIdAsync_ShouldReturnPaymentMethod_WhenExists()
+        public async Task GetByIdAsync_ShouldReturnPaymentMethod_WhenItExists()
         {
             //Arrange
             var options = CreateNewContextOptions();
@@ -98,7 +98,7 @@ namespace PersonalFinanceMng.Tests.Integration.Repository
             await context.SaveChangesAsync();
 
             //Act
-            var result = await repository.GetByIdAsync(entity.Id);
+            var result = await repository.GetByIdAsync(userId, entity.Id);
 
             //Assert
             result.Should().NotBeNull();
@@ -120,7 +120,7 @@ namespace PersonalFinanceMng.Tests.Integration.Repository
             await context.SaveChangesAsync();
             //Act
             entity.UpdateDetails("VR", "Vale Refeicao");
-            await repository.UpdateAsync(entity);
+            await repository.UpdateAsync(userId,entity);
 
             // Assert
             using var assertContext = new AppDbContext(options);
@@ -131,7 +131,7 @@ namespace PersonalFinanceMng.Tests.Integration.Repository
         }
 
         [Fact]
-        public async Task softDeleteAsync_ShouldSetIsActiveToFalse()
+        public async Task SoftDeleteAsync_ShouldSetIsActiveToFalse()
         {
             // Arrange
             var options = CreateNewContextOptions();
@@ -143,12 +143,12 @@ namespace PersonalFinanceMng.Tests.Integration.Repository
             await repository.AddAsync(entity);
 
             // Act
-                await repository.SoftDeleteAsync(entity);
+                await repository.SoftDeleteAsync(userId, entity);
 
             // Assertion
             using var assertContext = new AppDbContext(options);
             var repo = new PaymentMethodRepository(assertContext);
-            var newEntity = await repo.GetByIdAsync(entity.Id);
+            var newEntity = await repo.GetByIdAsync(userId,entity.Id);
             newEntity.Should().BeNull();
         }
 
@@ -165,7 +165,7 @@ namespace PersonalFinanceMng.Tests.Integration.Repository
             await repository.AddAsync(entity);
 
             // Act
-            await repository.HardDeleteAsync(entity);
+            await repository.HardDeleteAsync(userId, entity);
 
             // Assertion
             using var assertContext = new AppDbContext(options);

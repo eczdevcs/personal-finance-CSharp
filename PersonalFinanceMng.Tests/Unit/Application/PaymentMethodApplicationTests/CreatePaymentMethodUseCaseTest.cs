@@ -1,12 +1,15 @@
 ﻿using Moq;
 using PersonalFinanceMng.Application.UseCases.PaymentMethods.CreatePaymentMethod;
+using PersonalFinanceMng.Application.DTOs.Request;
+using PersonalFinanceMng.Application.DTOs.Response;
+
 using PersonalFinanceMng.Domain.Entities;
 using PersonalFinanceMng.Domain.Repositories;
 using System;
 
 
 
-namespace PersonalFinanceMng.Tests.Unit.Application
+namespace PersonalFinanceMng.Tests.Unit.Application.PaymentMethodApplicationTests
 {
     public class CreatePaymentMethodUseCaseTest
     {
@@ -36,8 +39,8 @@ namespace PersonalFinanceMng.Tests.Unit.Application
             Assert.Equal(user.Id, result.UserId);
         }
 
-        [Fact]
 
+        [Fact]
         public async Task Should_throw_Exception_when_user_doesnot_exists()
         {
             // Arrange
@@ -48,7 +51,7 @@ namespace PersonalFinanceMng.Tests.Unit.Application
 
             var useCase = new CreatePaymentMethodUseCase(paymentMethodRepoMock.Object, userRepoMock.Object);
 
-            var requestDTO = new CreatePaymentMethodRequestDTO("Cartão de Crédito", "Nubank", Guid.NewGuid(), true);
+            var requestDTO = new CreatePaymentMethodRequestDTO( "Cartão de Crédito", "Nubank", Guid.NewGuid(), true);
 
             // act & assert
 
@@ -56,6 +59,5 @@ namespace PersonalFinanceMng.Tests.Unit.Application
             // checando se o repositorio nao foi chamado, o que e o esperado
             paymentMethodRepoMock.Verify(repo => repo.AddAsync(It.IsAny<PaymentMethod>()), Times.Never());
         }
-
     }
 }

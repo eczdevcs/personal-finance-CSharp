@@ -24,6 +24,11 @@ public class PaymentMethodConfiguration : IEntityTypeConfiguration<PaymentMethod
         builder.Property(p => p.Description)
             .HasMaxLength(100);
 
+        // alterando o tipo userId para Guid por inferencia
+        builder.Property(p => p.UserId)
+       .IsRequired();
+
+
         // Ignora a propriedade NormalizedName para NÃO criar a coluna no banco de dados
         builder.Ignore(p => p.NormalizedName);
 

@@ -1,8 +1,8 @@
 ﻿using PersonalFinanceMng.Domain.Repositories;
 using PersonalFinanceMng.Domain.Entities;
 using System;
-
-using PersonalFinanceMng.Application.UseCases.PaymentMethods.CreatePaymentMethod;
+using PersonalFinanceMng.Application.DTOs.Request;
+using PersonalFinanceMng.Application.DTOs.Response;
 namespace PersonalFinanceMng.Application.UseCases.PaymentMethods.CreatePaymentMethod
 {
     public class CreatePaymentMethodUseCase : ICreatePaymentMethodUseCase
@@ -18,7 +18,6 @@ namespace PersonalFinanceMng.Application.UseCases.PaymentMethods.CreatePaymentMe
             _paymentMethodRepsitory = paymentMethodRepository;
             _userRepository = userRepository;
         }
-
 
 
 
@@ -40,7 +39,8 @@ namespace PersonalFinanceMng.Application.UseCases.PaymentMethods.CreatePaymentMe
             return new PaymentMethodResponseDTO (
                 paymentMethod.Id, 
                 paymentMethod.Name, 
-                paymentMethod.UserId, 
+                paymentMethod.UserId,
+                paymentMethod.Description,
                 paymentMethod.IsActive,
                 paymentMethod.CreatedAt,
                 paymentMethod.UpdatedAt
