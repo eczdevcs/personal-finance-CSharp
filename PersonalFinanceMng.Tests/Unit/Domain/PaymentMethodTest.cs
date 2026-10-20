@@ -16,7 +16,8 @@ public class PaymentMethodTests
         string expectedName,
         string expetedNormalizedName)
     {
-        var paymentMethod = new PaymentMethod(null, input, null, userId: 1);
+        var userId = Guid.NewGuid();
+        var paymentMethod = new PaymentMethod(1, input, null, userId);
 
         paymentMethod.Name.Should().Be(expectedName);
         paymentMethod.NormalizedName.Should().Be(expetedNormalizedName);
@@ -28,7 +29,11 @@ public class PaymentMethodTests
     [InlineData("   ")]
     public void SetName_WithInvalidName_ShouldThrowAnException(string invalidName)
     {
-        FluentActions.Invoking(() => new PaymentMethod(id:null, name: invalidName, description:  null, userId: 1,isActive: true))
+        //arrange
+        var userId = Guid.NewGuid();
+
+        //assertion
+        FluentActions.Invoking(() => new PaymentMethod(id:1, name: invalidName, description:  null, userId,isActive: true))
             .Should()
             .Throw<ArgumentException>()
             .WithMessage("*O Nome do método deve ser fornecido: *");
@@ -37,11 +42,74 @@ public class PaymentMethodTests
     [Fact]
     public void Equals_With_SameId_Should_return_true()
     {
-        var pm1 = new PaymentMethod(1, "Pix", null, null, true);
-        var pm2 = new PaymentMethod(1, "Dinheiro", null, null, true);
+        var userId = Guid.NewGuid();
+        var pm1 = new PaymentMethod(1, "Pix", null, userId, true);
+        var pm2 = new PaymentMethod(1, "Dinheiro", null, userId, true);
 
         var result = pm1.Equals(pm2);
 
         result.Should().BeTrue();
     }
+
+    [Fact]
+    public void SetDetails_WithOrWithoutNameAndDescriptionNecessarelyProvided_ShouldSetCorrectly()
+    {
+        var userId = Guid.NewGuid();
+        //Arrange
+        var pm = new PaymentMethod("Pix", "Pagamento isntantaneo", userId);
+        var pm2 = new PaymentMethod("VR", "Vale", userId);
+        // Act
+        // providing both name and description
+        pm.UpdateDetails("Dinheiro", "Dinheiro vivo");
+        //providing just description
+        pm2.UpdateDetails(null, "Vale refeicao Flash");
+
+
+        // Assert
+        pm.Name.Should().Be("Dinheiro");
+        pm.Description.Should().Be("Dinheiro vivo");
+        pm2.Name.Should().Be("VR");
+        pm2.Description.Should().Be("Vale refeicao Flash");
+    }
+
+    [Fact]
+    public void Deactivate_ShouldSetIsActiveToFalse()
+    {
+        //Arrange
+
+        var userId = Guid.NewGuid();
+            var pm = new PaymentMethod("Pix", "Pagamento isntantaneo", userId, true);
+
+        //Act
+             pm.Deactivate();
+        //Assert
+        pm.Should().NotBe(null);
+        pm.Name.Should().Be("Pix");
+        pm.Description.Should().Be("Pagamento isntantaneo");
+        pm.IsActive.Should().Be(false);
+    }
+
+    [Fact]
+    public void Equals_ShouldReturTrueIfIdAreEqualFalseNoProvidedIds()
+    {
+        var userId = Guid.NewGuid();
+
+        //Arrange
+        var pm1 = new PaymentMethod(1, "Pix", "Pagamento isntantaneo", userId, true);
+        var pm2 = new PaymentMethod(1, "Pix", "Pagamento isntantaneo", userId, true);
+
+        var pm3WithoutId =  new  PaymentMethod("Pix", "Pagamento isntantaneo", userId, true);
+        var pm4WithoutId = new PaymentMethod("Pix", "Pagamento isntantaneo", userId, true);
+
+        // Act
+        var resultTwoIdEquals = pm1.Equals(pm2);
+        var resultNoIdProvided = pm3WithoutId.Equals(pm4WithoutId);
+
+
+        // Assertion 
+
+        resultTwoIdEquals.Should().BeTrue();
+        resultNoIdProvided.Should().BeFalse();
+    }
+
 }

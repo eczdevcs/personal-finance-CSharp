@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using PersonalFinanceMng.Domain.Repositories;
 using PersonalFinanceMng.Infrastructure.Database.Context;
-using Microsoft.EntityFrameworkCore;
+using PersonalFinanceMng.Infrastructure.Database.Repositories;
 
 
 namespace PersonalFinanceMng.Infrastructure
@@ -19,7 +21,9 @@ namespace PersonalFinanceMng.Infrastructure
             {
                 throw new InvalidOperationException("A string de conexão 'DefaultConnection' não foi encontrada no appsettings.json!");
             }
-            //services.AddDbContext<AppDbContext>();
+
+            services.AddScoped<IUserRepository, UserRepsitoryMOCK>();
+            services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>(); // Adicione esta linha
             services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(connectionString));
 

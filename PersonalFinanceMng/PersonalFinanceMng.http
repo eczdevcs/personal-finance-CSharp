@@ -1,6 +1,0 @@
-@PersonalFinanceMng_HostAddress = http://localhost:5153
-
-GET {{PersonalFinanceMng_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
