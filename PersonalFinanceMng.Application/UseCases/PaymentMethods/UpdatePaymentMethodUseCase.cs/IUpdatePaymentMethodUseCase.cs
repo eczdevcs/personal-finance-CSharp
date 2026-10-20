@@ -9,9 +9,9 @@ namespace PersonalFinanceMng.Application.UseCases.PaymentMethods.UpdatePaymentMe
 {
     public interface IUpdatePaymentMethodUseCase
     {
-        Task<PaymentMethod> ExecuteAsync(
+        Task<PaymentMethodResponseDTO> ExecuteAsync(
             Guid userId,
-            PaymentMethod paymentMethod
+            PaymentMethodRequestDTO paymentMethod
         );
     }
 }

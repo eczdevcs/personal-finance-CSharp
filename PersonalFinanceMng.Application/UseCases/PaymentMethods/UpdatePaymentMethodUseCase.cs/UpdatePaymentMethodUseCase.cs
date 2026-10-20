@@ -21,9 +21,9 @@ namespace PersonalFinanceMng.Application.UseCases.PaymentMethods.UpdatePaymentMe
             _userRepository = userRepository;
         }
 
-        async public Task<PaymentMethod> ExecuteAsync(
+        async public Task<PaymentMethodResponseDTO> ExecuteAsync(
             Guid userId, 
-            PaymentMethod paymentMethod
+            PaymentMethodRequestDTO paymentMethod
         )
         {
 
@@ -47,7 +47,16 @@ namespace PersonalFinanceMng.Application.UseCases.PaymentMethods.UpdatePaymentMe
             
             var updated = await _paymentMethodRepository.UpdateAsync(userId,methodFromDb);
 
-            return updated;
+
+            return new PaymentMethodResponseDTO(
+                updated.Id,
+                updated.Name,
+                updated.UserId,
+                updated.Description,
+                updated.IsActive,
+                updated.CreatedAt,
+                updated.UpdatedAt
+            );
         }
 
      

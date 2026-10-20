@@ -1,4 +1,5 @@
-﻿using PersonalFinanceMng.Domain.Entities;
+﻿using PersonalFinanceMng.Application.DTOs.Response;
+using PersonalFinanceMng.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,6 +8,6 @@ namespace PersonalFinanceMng.Application.UseCases.PaymentMethods.FindAllByUserId
 {
    public interface IFindAllByUserIdUseCase
    {
-        Task<IEnumerable<PaymentMethod>> ExecuteAsync(Guid userId);
+        Task<IEnumerable<PaymentMethodResponseDTO>> ExecuteAsync(Guid userId);
    }
 }
